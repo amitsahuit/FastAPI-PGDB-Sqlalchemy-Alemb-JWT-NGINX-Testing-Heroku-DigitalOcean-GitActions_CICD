@@ -1,0 +1,40 @@
+version: "3"
+# Service is a contaiiner. So, for example if we want docker compose to spin 4 containers then we can have 4 services. 
+services:
+  api: # Name of the container
+    build: . # "." is the context of the file present in the current path
+    ports: # By default outside world can't talk to our container so we need to Open port in our machine.
+      - 8000:8000 #syntax --> <<port on localhost>>:<<port on container which we mentioned in the last of our Dockerfile>>
+    volumes:
+      - ./:/usr/src/FastAPIDemo:ro # this line is to synch all local code with docker container (root@26924c9704bf:/usr/src/FastAPIDemo#) on go.
+    # :ro is ment for read only that means only local host user can change the code and the ontainer wil have only read only access.
+    command: uvicorn FastAPIDemo.main:app --host 0.0.0.0 --port 8000 --reload
+    # we can't add reload in DockerFile as it will go into production so doe development purpose we will add this here..
+    # If we dont want to declare all our environment variables again and we want to use our .env file then uncomment the below line.
+    # env_file: 
+    #     - ./.env
+    environment:
+      - DATABASE_HOSTNAME=postgres # we can provide IP of DB or else just paste the service name "postgres" wich we defined below in line 27.
+      - DATABASE_PORT=5432
+      - DATABASE_PASSWORD=sys
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    command: uvicorn FastAPIDemo.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on: # we need PG DB to start before our application starts so we define this depends_on tab
+      - postgres
+
+  postgres:
+    image: postgres # this is the default image name which Docker give in dockerhub website.
+    environment:
+      - POSTGRES_PASSWORD=sys
+      - POSTGRES_DB=postgres
+     # This is for saving the data from containr to localmachine so that even if we kill/delete the DB container we will be having the data
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    # postgres-db is the name of the volume and after : its the default path in the container where te db date resides.
+volumes:
+  postgres-db: #whenever we create a named volume then we have to define volume section globly and pass the name.
+                # We have to provide this globely so that multiple containers can access this volume.
