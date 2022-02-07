@@ -46,7 +46,7 @@ class UserCreationResponse(BaseModel):
 class partnerArrayModel(BaseModel):
     partnername: str
     partnerfunction: str
-    rating: int
+    rating: int = 4
 
 
 class createPartner(partnerArrayModel):
