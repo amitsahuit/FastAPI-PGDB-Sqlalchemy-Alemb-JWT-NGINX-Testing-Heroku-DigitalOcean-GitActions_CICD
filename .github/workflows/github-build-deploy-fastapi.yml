@@ -32,8 +32,7 @@ jobs:
       - name: install all dependencies
         run: pip install -r requirements.txt
       - name: installing pytest and executing test cases
-        run:
-          pip install pytest
-          pytest
+        run: pip install pytest
+        run: pytest
           #pytest -v -s
       # - run: echo "🍏 This job's status is ${{ job.status }}."
