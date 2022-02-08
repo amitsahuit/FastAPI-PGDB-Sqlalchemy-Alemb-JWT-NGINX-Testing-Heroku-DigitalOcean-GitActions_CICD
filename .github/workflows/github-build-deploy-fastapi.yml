@@ -101,6 +101,7 @@ jobs:
   fastapiDeploymentJob2:
     runs-on: ubuntu-latest
     needs: [fastapiBuildJob1]
+    
     steps:
       - name: Deployment steps
-      - run: echo "Going to add deployment steps"
+        run: echo "Going to add deployment steps"
