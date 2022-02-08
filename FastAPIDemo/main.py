@@ -43,7 +43,7 @@ app.include_router(FileOperation.router)
 #-----------------------------------------------Testing purpose-----------------------------------------------
 @app.get("/")
 async def root():
-    return {"message": "trying CICD in heroky"}
+    return {"message": "trying CICD in heroku and DO-Ubuntu server"}
 
 # @app.get("/SQlAlchemyDemo")
 # async def SQlAlchemyDemo(db: Session = Depends(get_db)):
