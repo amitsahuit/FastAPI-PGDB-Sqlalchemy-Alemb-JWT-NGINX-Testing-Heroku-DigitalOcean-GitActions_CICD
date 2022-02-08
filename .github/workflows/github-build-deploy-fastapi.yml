@@ -101,7 +101,15 @@ jobs:
   fastapiDeploymentInPRODJob2:
     runs-on: ubuntu-latest
     needs: [fastapiBuildInTESTJob1]
-    
+    environment:
+      name: PROD # This name should be same as the name which we provided in github
+
     steps:
-      - name: Deployment steps
-        run: echo "Going to add deployment steps"
+      - name: pulling git repo
+        uses: actions/checkout@v2
+      - name: Deploying to Heroku
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: fastapidemo-amit #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_LOGIN_EMAIL}}
